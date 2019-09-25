@@ -11,7 +11,7 @@ export default class UserSignIn extends Component {
 
     render() {
         const {
-            username,
+            emailAddress,
             password,
             errors,
         } = this.state;
@@ -28,12 +28,12 @@ export default class UserSignIn extends Component {
                         elements={() => (
                             <React.Fragment>
                                 <input
-                                    id="username"
-                                    name="username"
+                                    id="emailAddress"
+                                    name="emailAddress"
                                     type="text"
-                                    value={username}
+                                    value={emailAddress}
                                     onChange={this.change}
-                                    placeholder="User Name" />
+                                    placeholder="Email Address" />
                                 <input
                                     id="password"
                                     name="password"
@@ -64,7 +64,7 @@ export default class UserSignIn extends Component {
 
     submit = () => {
         const { context } = this.props;
-        const { from } = this.props.location.state || { from: { pathname: '/authenticated' } };
+        const { from } = this.props.location.state || { from: { pathname: '/' } };
         const { emailAddress, password } = this.state;
 
         context.actions.signIn(emailAddress, password)

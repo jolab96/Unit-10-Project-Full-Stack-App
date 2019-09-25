@@ -4,13 +4,26 @@
 import './App.css';
 
 import React, { Component } from 'react';
-import { BrowserRouter, Route, } from 'react-router-dom';
-import Header from './Components/Header';
-import Courses from './Components/Courses';
-import UserSignUp from './Components/UserSignUp';
-import UserSignIn from './Components/UserSignIn';
-import UserSignOut from './Components/UserSignOut';
-import CourseDetail from './Components/CourseDetail';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import withContext from './Context'
+
+import Header from './Components/Header'
+import Courses from './Components/Courses'
+import UserSignIn from './Components/UserSignIn'
+import UserSignOut from './Components/UserSignOut'
+import UserSignUp from './Components/UserSignUp'
+import CourseDetail from './Components/CourseDetail'
+
+
+const CourseDetailWithContext = withContext(CourseDetail);
+const CoursesWithContext = withContext(Courses);
+// const CreateCourseWithContext = withContext(CreateCourse);
+const HeaderWithContext = withContext(Header);
+// const UpdateCourseWithContext = withContext(UpdateCourse);
+const UserSignUpWithContext = withContext(UserSignUp);
+const UserSignInWithContext = withContext(UserSignIn);
+const UserSignOutWithContext = withContext(UserSignOut);
 
 
 
@@ -18,16 +31,18 @@ import CourseDetail from './Components/CourseDetail';
 export default class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <div>
-          <Route path='/' component={Header} />
-          <Route path='/courses' component={Courses} />
-          <Route path='/signup' component={UserSignUp} />
-          <Route path='/signin' component={UserSignIn} />
-          <Route path='/signout' component={UserSignOut} />
-         
+      <div>
+      <Router>
+        <HeaderWithContext />
+
+          <Route exact path='/' component={CoursesWithContext} />
+          <Route path='/signup' component={UserSignUpWithContext} />
+          <Route path='/signin' component={UserSignInWithContext} />
+          <Route path='/signout' component={UserSignOutWithContext} />
+          <Route path='/courses/:id' component={CourseDetailWithContext} />
+        </Router>
         </div>
-      </BrowserRouter>
+    
     );
   }
 }
