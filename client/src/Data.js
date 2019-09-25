@@ -49,4 +49,19 @@ export default class Data {
             throw new Error();
         }
     }
+    //GET /courses/:id, from this ID
+    async getCourseById(id) {
+        const response = await this.api('/courses/' + id, 'GET');
+        if (response.status === 200) {
+            return response.json().then(data => data);
+        }
+        //GET /courses/:id error code is 404
+        else if (response.status === 404) {
+            return null;
+        }
+        //reached if 500 or any other status code
+        else {
+            throw new Error();
+        }
+    }
 }

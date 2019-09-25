@@ -20,7 +20,7 @@ class Courses extends Component {
             <div className="bounds"> 
                 {this.state.courses.map(course =>
                     <div className="grid-33" key={course.id}>
-                        <a className="course--module course--link" href="course-detail.html">
+                        <a className="course--module course--link" href={`/courses/${course.id}`}>
                     <h4 key={course.id}className="course--label">Course</h4>
                     <h3 key={course.id}className="course--title">{course.title}</h3>
                     </a></div>
