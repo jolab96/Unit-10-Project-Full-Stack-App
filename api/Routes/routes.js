@@ -96,12 +96,25 @@ router.post('/users', async (req, res, next) => {
 // Get route to find all courses
 
 router.get('/courses', async (req, res, next) => {
-    const course = await Course.findAll()
+    const course = await Course.findAll({
+
+        include: [
+            {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'firstName', 'lastName', 'emailAddress']
+
+
+            },
+        ],
+
+
+    })
     res.json(course)
 
 })
 
-// get route to return course that the user owns
+// getting route to return course 
 
 router.get('/courses/:id', async (req, res, next) => {
     try {
@@ -109,6 +122,16 @@ router.get('/courses/:id', async (req, res, next) => {
             where: {
                 id: req.params.id
             },
+
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['id', 'firstName', 'lastName', 'emailAddress', 'password']
+
+
+                },
+            ]
         })
         if (usercourse === null) {
             res.status(404)
@@ -123,13 +146,13 @@ router.get('/courses/:id', async (req, res, next) => {
     }
 })
 
-// post route to create course with authentication for title and description
+// post route to create course with authentication
 
-router.post('/courses', authenticateUser, async (req, res, next) => {
+router.post('/courses', async (req, res, next) => {
     try {
         if (req.body.title && req.body.description) {
             const createCourse = await Course.create(req.body);
-            res.location(`/api/courses/${createCourse.id}`) //setting location
+            res.location(`/api/courses/${createCourse.id}`) // setting the location
             res.status(201).end();
         }
         else {
@@ -142,29 +165,29 @@ router.post('/courses', authenticateUser, async (req, res, next) => {
 })
 
 
-router.delete("/courses/:id", authenticateUser, async (req, res, next) => {
+router.delete("/courses/:id", async (req, res, next) => {
     const course = await Course.findByPk(req.params.id);
-    if (course.userId === req.body.userId) {
-        await course.destroy();
-        res.status(204).end();
-    }
-    else
-        res.status(403).end();
+    // if (course.userId === req.body.userId) {
+    await course.destroy();
+    res.status(204).end();
+
+    //  else
+    //     res.status(403).end();
 })
 
 
-router.put('/courses/:id', authenticateUser, async (req, res, next) => {
+router.put('/courses/:id', async (req, res, next) => {
     const course = await Course.findByPk(req.params.id);
-    if (course.userId === req.body.userId) {
-        if (req.body.title && req.body.description) {
-            course.update(req.body);
-            res.status(204).end()
-        } else {
-            res.status(400).end();
-        }
+    // if (course.userId === req.body.userId) {
+    if (req.body.title === '' || req.body.description === '') {
 
-    } else
-        res.status(403).end();
+        res.status(400).end();
+    } else {
+
+        course.update(req.body);
+        res.status(204).end()
+    }
+
 })
 
 module.exports = router;
